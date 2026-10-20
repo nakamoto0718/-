@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ケース記録自動生成ツール</title>
+<style>
+body {
+    font-family: sans-serif;
+    margin: 40px;
+    background: #f7f7f7;
+}
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 600px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+}
+textarea, input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+#output {
+    white-space: pre-wrap;
+    background: #eef;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>ケース記録自動生成（規定フォーマット）</h2>
+
+<label>作業内容（例：Excelを用いた軍用機器のデータ入力）</label>
+<input id="work" type="text">
+
+<label>進捗（例：5件入力。完了予定日は未定）</label>
+<textarea id="progress"></textarea>
+
+<label>困り感（例：なし / あり：内容を記入）</label>
+<textarea id="trouble"></textarea>
+
+<label>会話内容・精神状態（任意）</label>
+<textarea id="mental"></textarea>
+
+<button onclick="generate()">記録を生成</button>
+
+<div id="output"></div>
+</div>
+
+<script>
+function generate() {
+    const work = document.getElementById("work").value;
+    const progress = document.getElementById("progress").value;
+    const trouble = document.getElementById("trouble").value;
+    const mental = document.getElementById("mental").value;
+
+    let troubleText = "";
+    if (trouble.includes("なし") || trouble === "") {
+        troubleText = "作業中、困り感の確認を行ったところ特にないとのことだったため、経過観察を維持。";
+    } else {
+        troubleText = `作業中、困り感の確認を行ったところ「${trouble}」との訴えがあり、必要に応じて支援を実施。`;
+    }
+
+    let mentalText = mental ? mental : "（記録該当なし）";
+
+    const output = 
+`1行目
+時間通りに出勤。
+
+2行目
+始業後、${work}に取り組む。
+
+3行目
+進捗：${progress}
+
+4行目
+${troubleText}
+
+5行目
+${mentalText}
+`;
+
+    document.getElementById("output").textContent = output;
+}
+</script>
+
+</body>
+</html>
